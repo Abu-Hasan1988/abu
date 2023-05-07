@@ -1,10 +1,12 @@
 
 import React from 'react';
 import Card from '../components/Card'; 
+import  AppContext  from '../context';
 
+function Favorites({onAddToFavorite})  
+    { 
+       const {favorites} = React.useContext(AppContext);
 
-function Favorites({items, onAddToFavorite})  
-    {
     return(
         <div className="content p-40">
         <div className='d-flex align-center  justify-between mp-40'>
@@ -16,8 +18,7 @@ function Favorites({items, onAddToFavorite})
 
           
 
-        {items
-          .map((item, index)=>( 
+        {favorites.map((item, index)=>( 
           <Card key={index}
           favorited={true}
           onFavorite={onAddToFavorite}

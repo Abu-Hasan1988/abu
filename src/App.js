@@ -7,8 +7,7 @@ import Header from './components/Header';
 import React from 'react';
 import axios from 'axios';
 import {Route} from 'react-router-dom';
-
-
+import AppContext from './context';
 
 
 
@@ -20,6 +19,8 @@ function App() {
    
    const [cartOpened, setCartOpened] = React.useState(false);
    const [searchValue, setSearchValue] = React.useState('');
+   const [isLoading, setIsLoading] = React.useState(true);
+
 
    React.useEffect(()=>{
     async function fetchData() {
@@ -27,8 +28,9 @@ function App() {
       const cartResponse = await axios.get('https://6418af2575be53f451e53677.mockapi.io/cart') 
       const favoritesResponse = await axios.get('https://6437dbe5894c9029e8c8093d.mockapi.io/favorites') 
       const itemsResponse = await axios.get('https://6418af2575be53f451e53677.mockapi.io/items')
+        
+      setIsLoading(false);
 
-      
       setCartItems(cartResponse.data);
       setFavorites(favoritesResponse.data);
       setItems(itemsResponse.data);
@@ -58,7 +60,7 @@ function App() {
 
  const onAddToFavorite = async (obj) => {
   try {
-  if (favorites.find((favObj)=>favObj.id == obj.id)) {
+  if (favorites.find((favObj)=>Number(favObj.id) ===Number(obj.id))) {
     axios.delete(`https://6437dbe5894c9029e8c8093d.mockapi.io/favorites/${obj.id}`);
    
   } else {
@@ -75,8 +77,14 @@ function App() {
    setSearchValue(event.target.value);
  }; 
 
+ const isItemAdded = (id)=> {
+  return cartItems.some((obj)=> Number(obj.id) === Number(id));
+ };
+
+
   return (
-    <div className="Wrapper clear">
+    <AppContext.Provider value={{items, cartItems, favorites, isItemAdded}}>
+      <div className="Wrapper clear">
      {cartOpened && <Drawer items={cartItems}  onClose={ () => setCartOpened(false) } onRemove={onRemoveItem} /> }
 
     <Header onClickCart={()=> setCartOpened(true)}/>
@@ -90,19 +98,21 @@ function App() {
     onChangeSearchInput={onChangeSearchInput}
     onAddToFavorite={onAddToFavorite}
     onAddToCart={onAddToCart}
+    isLoading={isLoading}
     /> 
     
     </Route>
            
     <Route  path="/favorites" exact> 
     <Favorites 
-    items={favorites}
+   
     onAddToFavorite={onAddToFavorite}
     /> 
     
     </Route>     
       
         </div>
+    </AppContext.Provider>
       
    
     
