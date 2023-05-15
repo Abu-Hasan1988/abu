@@ -5,9 +5,10 @@ import axios from 'axios';
 import AppContext from '../context';
 
 
+
 function Orders()  
     { 
-      const {onAddToFavorite, onAddToCart} =  React.useContext(AppContext);
+      const {onAddToFavorite, onAddToCart} = React.useContext(AppContext);
       const [orders, setOrders] = React.useState([]);
       const [isLoading, setIsLoading] = React.useState(true);
       
@@ -15,13 +16,14 @@ function Orders()
       React.useEffect(()=> {
         (async () => {
        try { 
-        const {data} = await axios.get('https://645d63a7250a246ae31e882e.mockapi.io/orders');
+        const {data} = await axios.get('https://645e5a5412e0a87ac0ee299a.mockapi.io/orders');
         setOrders(data.reduce((prev,obj)=>[...prev, ...obj.items], []));
         setIsLoading(false);
         
+        
        } catch (error) {
-        alert('Ошибка');
-        console.error(error);
+        // alert('Ошибка');
+        // console.error(error);
        }
       })();
     }, []);
@@ -39,9 +41,7 @@ function Orders()
 
         {(isLoading ? [...Array(8)] : orders).map((item, index)=>( 
           <Card  key={index}
-          
-         
-          
+                 
           loading={isLoading}
           {...item}
           /> 

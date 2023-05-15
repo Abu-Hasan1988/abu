@@ -18,7 +18,7 @@ function Drawer({onClose, onRemove, items = [] }) {
   const onClickOrder = async  () => {
     try {
       setIsLoading(true);
-      const{data} = await axios.post('https://6437dbe5894c9029e8c8093d.mockapi.io/orders',{items: cartItems});
+      const{data} = await axios.post('https://645e5a5412e0a87ac0ee299a.mockapi.io/orders',{items: cartItems});
       
     setOrderId(data.id);
     setIsOrderComplete(true);
